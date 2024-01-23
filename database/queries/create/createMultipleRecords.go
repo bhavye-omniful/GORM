@@ -9,14 +9,18 @@ import (
 )
 
 func CreateMultipleUser(ctx *gin.Context) {
-	var user []models.User
+	var user []*models.User
 
 	err := ctx.ShouldBindJSON(&user)
 	if err != nil {
-		log.Fatal("Error binding json to user : ", err.Error())
+		log.Println("Error binding json to user : ", err.Error())
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
 	}
 
-	log.Println(user)
+	for _, t := range user {
+		log.Println(*t)
+	}
 
 	result := database.Db.Create(user)
 	if result.Error != nil {
