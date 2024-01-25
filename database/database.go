@@ -27,4 +27,14 @@ func migrate() {
 	if err != nil {
 		log.Fatal("Error migrating user model : ", err.Error())
 	}
+
+	err = Db.AutoMigrate(&models.DayModel{})
+	if err != nil {
+		log.Fatal("Error migrating day model : ", err.Error())
+	}
+
+	err = Db.AutoMigrate(&models.Log{})
+	if err != nil {
+		log.Fatal("Error migrating log model : ", err.Error())
+	}
 }

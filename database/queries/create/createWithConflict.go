@@ -1,14 +1,13 @@
 package create
 
 import (
+	"fmt"
 	"github.com/bhavye-omniful/GORM/database"
 	"github.com/bhavye-omniful/GORM/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm/clause"
 	"log"
 	"net/http"
-	"strconv"
-	"time"
 )
 
 func CreateWithConflict(ctx *gin.Context) {
@@ -23,7 +22,7 @@ func CreateWithConflict(ctx *gin.Context) {
 
 	log.Println(user)
 
-	// Do nothing on conflict
+	//Do nothing on conflict
 	result := database.Db.Clauses(clause.OnConflict{DoNothing: true}).Create(&user)
 	if result.Error != nil {
 		log.Println(result.Error.Error())
@@ -31,19 +30,19 @@ func CreateWithConflict(ctx *gin.Context) {
 		return
 	}
 
-	// Update columns to default value on `id` conflict
-	result = database.Db.Clauses(clause.OnConflict{
-		Columns: []clause.Column{{Name: "email"}},
-		DoUpdates: clause.Assignments(map[string]interface{}{
-			"email": strconv.FormatInt(time.Now().UnixNano(), 10),
-		}),
-	}).Create(&user)
+	if result.RowsAffected == 0 {
+		result = database.Db.Create(&models.Log{
+			TableName: "users",
+			Comment:   fmt.Sprintf("%s Had a conflict inserting user details", user.Name),
+		})
 
-	//result := database.Db.Create(&user)
+		if result.Error != nil {
+			log.Println(result.Error.Error())
+			ctx.JSON(http.StatusInternalServerError, result.Error.Error())
+			return
+		}
 
-	if result.Error != nil {
-		log.Println(result.Error.Error())
-		ctx.JSON(http.StatusInternalServerError, result.Error.Error())
+		ctx.JSON(200, gin.H{"message": "conflict happened"})
 		return
 	}
 
