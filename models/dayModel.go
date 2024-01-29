@@ -1,9 +1,12 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"github.com/bhavye-omniful/GORM/enums"
+	"github.com/bhavye-omniful/GORM/redis"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type DayModel struct {
@@ -36,6 +39,19 @@ func (d *DayModel) AfterSave(db *gorm.DB) (err error) {
 		TableName: d.Today,
 		Comment:   "Inserted something in day table",
 	}
+
+	res := redis.RedisClient.HSet(context.Background(), "DayMap:"+strconv.FormatUint(uint64(d.ID), 10), map[string]string{
+		"CreatedAt": d.CreatedAt.String(),
+		"UpdatedAt": d.UpdatedAt.String(),
+		"DeletedAt": d.DeletedAt.Time.String(),
+		"Today":     d.Today,
+		"Type":      string(d.Type),
+	})
+
+	if res.Err() != nil {
+		return errors.New("Problem inserting in redis" + res.Err().Error())
+	}
+
 	db.Create(&log)
 	return
 }

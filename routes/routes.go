@@ -24,11 +24,13 @@ func Routes() {
 	r.POST("/createUserFromMap", create.CreateRecordFromMap)
 	r.POST("/createWithConflict", create.CreateWithConflict)
 	r.POST("/createDay", create.CreateDay)
+	r.POST("/sendMsgSQS", create.SendMessage)
 
 	r.GET("/getSingleUser", retrieve.GetSingleObject)
 	r.GET("/getUserFromID", retrieve.GetUserByID)
 	r.GET("/getAllUsers", retrieve.GetAllUsers)
 	r.GET("/getUserByStringCondition", retrieve.GetUserByStringCond)
+	r.GET("/getMsgSqs", retrieve.RecieveMessage)
 
 	err := r.Run(":3000")
 	if err != nil {
