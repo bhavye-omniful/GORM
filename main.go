@@ -2,11 +2,14 @@ package main
 
 import (
 	"github.com/bhavye-omniful/GORM/csv"
-	"log"
+	"github.com/gocarina/gocsv"
+	"os"
 )
 
 type Order struct {
-	order_number string `csv:"Order Number"`
+	OrderNumber string `csv:"Order Number"`
+	Sku         string `csv:"SKU"`
+	Comment     string `csv:"BlaBla"`
 }
 
 func main() {
@@ -16,13 +19,30 @@ func main() {
 	//routes.Routes()
 	csv.Init()
 
-	data, err := csv.ReadFromCSV("orders.csv")
+	//data, err := csv.ReadFromCSV("orders.csv")
+	//if err != nil {
+	//	log.Fatal("Error reading from csv file")
+	//}
+
+	data := []*Order{&Order{
+		OrderNumber: "1234",
+		Sku:         "9999",
+		Comment:     "testing",
+	}}
+
+	//err = csv.WriteAllToCsv(data)
+	//if err != nil {
+	//	log.Fatal("Error writing to csv file")
+	//}
+
+	file, err := os.OpenFile("example.csv", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		log.Fatal("Error reading from csv file")
+		return
+	}
+	defer file.Close()
+	err = gocsv.MarshalFile(data, file)
+	if err != nil {
+		return
 	}
 
-	err = csv.WriteAllToCsv(data)
-	if err != nil {
-		log.Fatal("Error writing to csv file")
-	}
 }
