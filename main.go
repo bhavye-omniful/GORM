@@ -48,7 +48,7 @@ func main() {
 
 	data := []*Order{&Order{
 		OrderNumber: "1234",
-		Sku:         "9999",
+		Sku:         "123143",
 		Comment:     "testing",
 	}}
 
