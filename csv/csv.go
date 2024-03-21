@@ -2,6 +2,8 @@ package csv
 
 import (
 	"encoding/csv"
+	"github.com/bhavye-omniful/GORM/models"
+	"github.com/gocarina/gocsv"
 	"log"
 	"os"
 )
@@ -72,7 +74,7 @@ func WriteAllToCsv(data [][]string) error {
 	return nil
 }
 
-func ReadFromCSV(csvFile string) (data [][]string, err error) {
+func ReadFromCSV(csvFile string) (data []*models.Source, err error) {
 	file, err := os.Open(csvFile)
 	if err != nil {
 		log.Fatal("Error opening CSV file:", err)
@@ -85,12 +87,10 @@ func ReadFromCSV(csvFile string) (data [][]string, err error) {
 		}
 	}(file)
 
-	reader := csv.NewReader(file)
-
-	res, err := reader.ReadAll()
+	err = gocsv.UnmarshalFile(file, &data)
 	if err != nil {
-		log.Fatal("Error reading CSV file:", err)
+		log.Fatal("Error unmarshalling file")
 		return nil, err
 	}
-	return res, nil
+	return
 }

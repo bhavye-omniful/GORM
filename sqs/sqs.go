@@ -18,7 +18,7 @@ var svcOnce sync.Once
 func Init() {
 	// Initialize a session
 	sess, err := session.NewSession(&aws.Config{
-		Region:           aws.String("us-east-1"),
+		Region:           aws.String("eu-central-1"),
 		Credentials:      credentials.NewStaticCredentials("test", "test", ""),
 		S3ForcePathStyle: aws.Bool(true),
 		Endpoint:         aws.String("http://localhost:4566"),
@@ -30,13 +30,15 @@ func Init() {
 
 	svcOnce.Do(func() {
 		sqsSvc = sqs.New(sess)
-		CreateQueue("testQueue")
+		//CreateQueue("testQueue")
 	})
 
 	result, err := sqsSvc.ListQueues(nil)
 	for i, url := range result.QueueUrls {
 		fmt.Printf("%d: %s\n", i, *url)
 	}
+
+	queueUrl = "http://localhost.localstack.cloud:4566/000000000000/local-order-service-shipment-order-events"
 }
 
 func CreateQueue(name string) {

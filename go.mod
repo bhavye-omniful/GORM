@@ -1,15 +1,18 @@
 module github.com/bhavye-omniful/GORM
 
-go 1.21.5
+go 1.20
 
 require (
+	github.com/aws/aws-lambda-go v1.46.0
+	github.com/aws/aws-sdk-go v1.50.5
 	github.com/gin-gonic/gin v1.9.1
+	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a
+	github.com/redis/go-redis/v9 v9.4.0
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
 )
 
 require (
-	github.com/aws/aws-sdk-go v1.50.5 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
@@ -20,7 +23,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.17.0 // indirect
-	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
@@ -37,7 +39,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
-	github.com/redis/go-redis/v9 v9.4.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
@@ -48,6 +49,5 @@ require (
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
-	gopkg.in/guregu/null.v4 v4.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

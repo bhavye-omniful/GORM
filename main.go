@@ -1,7 +1,14 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/bhavye-omniful/GORM/csv"
+	"github.com/bhavye-omniful/GORM/database"
+	"github.com/bhavye-omniful/GORM/redis"
+	"github.com/bhavye-omniful/GORM/routes"
+	"github.com/bhavye-omniful/GORM/sqs"
 	"github.com/gocarina/gocsv"
 	"os"
 )
@@ -12,12 +19,27 @@ type Order struct {
 	Comment     string `csv:"BlaBla"`
 }
 
+type MyEventSlice []MyEvent
+type MyEvent struct {
+	Name string `json:"name"`
+}
+
+func HandleRequest(ctx context.Context, event *MyEvent) (*string, error) {
+	if event == nil {
+		return nil, fmt.Errorf("received nil event")
+	}
+	message := fmt.Sprintf("Hello %s!", event.Name)
+	return &message, nil
+}
+
 func main() {
-	//redis.Init()
-	//database.Init()
-	//sqs.Init()
-	//routes.Routes()
+	redis.Init()
+	database.Init()
+	sqs.Init()
+	routes.Routes()
 	csv.Init()
+
+	lambda.Start(HandleRequest)
 
 	//data, err := csv.ReadFromCSV("orders.csv")
 	//if err != nil {
@@ -44,5 +66,4 @@ func main() {
 	if err != nil {
 		return
 	}
-
 }
