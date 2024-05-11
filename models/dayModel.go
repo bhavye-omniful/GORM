@@ -40,6 +40,8 @@ func (d *DayModel) AfterSave(db *gorm.DB) (err error) {
 		Comment:   "Inserted something in day table",
 	}
 
+	// asdfghj
+
 	res := redis.RedisClient.HSet(context.Background(), "DayMap:"+strconv.FormatUint(uint64(d.ID), 10), map[string]string{
 		"CreatedAt": d.CreatedAt.String(),
 		"UpdatedAt": d.UpdatedAt.String(),
